@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExtName — Chrome Extension</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand-1: #6C47FF;
+    --brand-2: #FF4D9E;
+    --brand-3: #00C9A7;
+    --bg: #08080F;
+    --bg-card: #0F0F1A;
+    --bg-card2: #13132100;
+    --border: rgba(255,255,255,0.08);
+    --border-glow: rgba(108,71,255,0.35);
+    --text: #F0EEF9;
+    --muted: rgba(240,238,249,0.55);
+    --subtle: rgba(240,238,249,0.3);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  h1,h2,h3,h4,h5 { font-family: 'Syne', sans-serif; }
+
+  /* ── GRADIENT MESH BG ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 10%, rgba(108,71,255,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 0%, rgba(255,77,158,0.13) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 60% at 50% 80%, rgba(0,201,167,0.1) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+    height: 64px;
+    background: rgba(8,8,15,0.75);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.25rem;
+    background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.07); }
+
+  .nav-cta {
+    background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+    color: #fff !important;
+    font-weight: 500;
+    padding: 0.45rem 1.1rem !important;
+    border-radius: 8px !important;
+  }
+
+  .nav-cta:hover { opacity: 0.9; background: linear-gradient(135deg, var(--brand-1), var(--brand-2)) !important; }
+
+  /* ── SECTIONS ── */
+  section { position: relative; z-index: 1; }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    padding: 6rem 0 4rem;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(108,71,255,0.15);
+    border: 1px solid rgba(108,71,255,0.35);
+    border-radius: 100px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.8rem;
+    color: #a58bff;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-badge span { width: 6px; height: 6px; background: var(--brand-1); border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
+
+  @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.8); } }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-title .grad {
+    background: linear-gradient(135deg, #a58bff 0%, var(--brand-2) 50%, #ff9f59 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-desc {
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    max-width: 480px;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+    color: #fff;
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--text);
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+  }
+
+  .btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); }
+
+  /* Browser mockup */
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+  }
+
+  .browser-frame {
+    width: 100%;
+    max-width: 420px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(108,71,255,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .browser-bar {
+    background: rgba(255,255,255,0.04);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .dots { display: flex; gap: 5px; }
+  .dots span { width: 10px; height: 10px; border-radius: 50%; }
+  .dots span:nth-child(1) { background: #ff5f57; }
+  .dots span:nth-child(2) { background: #ffbd2e; }
+  .dots span:nth-child(3) { background: #28c840; }
+
+  .url-bar {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    color: var(--subtle);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .browser-content {
+    padding: 1.5rem;
+    min-height: 200px;
+  }
+
+  .mock-ui {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mock-row {
+    height: 12px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, rgba(108,71,255,0.25), rgba(255,77,158,0.2));
+  }
+
+  .mock-row:nth-child(2) { width: 75%; }
+  .mock-row:nth-child(3) { width: 60%; background: rgba(255,255,255,0.07); }
+
+  .mock-card-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .mock-card {
+    height: 64px;
+    border-radius: 8px;
+    background: rgba(108,71,255,0.1);
+    border: 1px solid rgba(108,71,255,0.2);
+  }
+
+  .mock-btn {
+    margin-top: 6px;
+    height: 36px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(108,71,255,0.5), rgba(255,77,158,0.4));
+  }
+
+  /* ── FEATURES ── */
+  #features { padding: 6rem 0; }
+
+  .section-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #a58bff;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .section-desc {
+    color: var(--muted);
+    max-width: 540px;
+    margin-bottom: 3rem;
+    font-size: 1.05rem;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .feature-card {
+    background: var(--bg-card);
+    padding: 1.75rem;
+    transition: background 0.2s;
+  }
+
+  .feature-card:hover { background: rgba(108,71,255,0.06); }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+  }
+
+  .feature-icon.purple { background: rgba(108,71,255,0.2); }
+  .feature-icon.pink { background: rgba(255,77,158,0.2); }
+  .feature-icon.teal { background: rgba(0,201,167,0.2); }
+  .feature-icon.amber { background: rgba(255,180,50,0.2); }
+
+  .feature-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .feature-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+
+  /* ── PRICING ── */
+  #pricing { padding: 6rem 0; }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 3rem;
+  }
+
+  .pricing-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    position: relative;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .pricing-card:hover { transform: translateY(-3px); }
+
+  .pricing-card.popular {
+    border-color: var(--brand-1);
+    box-shadow: 0 0 30px rgba(108,71,255,0.15), inset 0 1px 0 rgba(108,71,255,0.2);
+  }
+
+  .popular-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.85rem;
+    border-radius: 100px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .plan-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .plan-price {
+    font-size: 2.5rem;
+    font-weight: 800;
+    font-family: 'Syne', sans-serif;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .plan-price sup { font-size: 1.1rem; vertical-align: super; }
+  .plan-price span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+
+  .plan-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 1.5rem; }
+
+  .plan-features { list-style: none; margin-bottom: 1.75rem; }
+
+  .plan-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+    padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .plan-features li:last-child { border-bottom: none; }
+
+  .check {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(0,201,167,0.2);
+    color: var(--brand-3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 3px;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  .plan-btn {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+
+  .plan-btn-outline {
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .plan-btn-outline:hover { background: rgba(255,255,255,0.06); }
+
+  .plan-btn-filled {
+    background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+    color: #fff;
+    border: none;
+  }
+
+  .plan-btn-filled:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* ── LEGAL PAGES ── */
+  .legal-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .legal-tab {
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.875rem;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .legal-tab:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+  .legal-tab.active { background: rgba(108,71,255,0.15); border-color: rgba(108,71,255,0.4); color: #c4acff; }
+
+  .legal-content { display: none; }
+  .legal-content.active { display: block; }
+
+  .legal-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+  }
+
+  .legal-box h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-updated {
+    font-size: 0.82rem;
+    color: var(--subtle);
+    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .legal-box h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #a58bff;
+    margin: 1.75rem 0 0.6rem;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .legal-box p {
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.75;
+    margin-bottom: 0.75rem;
+  }
+
+  .legal-box ul {
+    color: var(--muted);
+    font-size: 0.92rem;
+    padding-left: 1.25rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.75;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 3rem clamp(1.5rem, 5vw, 4rem);
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+    margin-bottom: 1.5rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    color: var(--subtle);
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 0.3rem 0.5rem;
+    transition: color 0.2s;
+    cursor: pointer;
+  }
+
+  .footer-links a:hover { color: var(--muted); }
+
+  .footer-copy { font-size: 0.82rem; color: var(--subtle); }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .hero-visual { display: none; }
+    nav .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">ExtName</a>
+  <ul class="nav-links">
+    <li><a href="#features">Tính năng</a></li>
+    <li><a href="#pricing">Bảng giá</a></li>
+    <li><a href="#legal" onclick="showTab('terms')">Điều khoản</a></li>
+    <li><a href="#hero" class="nav-cta">Cài đặt miễn phí</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-badge">
+          <span></span>
+          Chrome Extension · Miễn phí để dùng thử
+        </div>
+        <h1 class="hero-title">
+          Tên extension<br>
+          <span class="grad">của bạn ở đây</span>
+        </h1>
+        <p class="hero-desc">
+          Mô tả ngắn về extension — nó làm gì, giải quyết vấn đề gì, và tại sao người dùng nên dùng nó. Viết khoảng 2–3 dòng là đủ.
+        </p>
+        <div class="hero-btns">
+          <a href="#" class="btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12l2 2 4-4"/></svg>
+            Thêm vào Chrome
+          </a>
+          <a href="#features" class="btn-ghost">Tìm hiểu thêm →</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <div class="url-bar">chrome-extension://yourextension</div>
+          </div>
+          <div class="browser-content">
+            <div class="mock-ui">
+              <div class="mock-row"></div>
+              <div class="mock-row"></div>
+              <div class="mock-row"></div>
+              <div class="mock-card-row">
+                <div class="mock-card"></div>
+                <div class="mock-card" style="background: rgba(255,77,158,0.1); border-color: rgba(255,77,158,0.2);"></div>
+              </div>
+              <div class="mock-btn"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <p class="section-label">Tính năng nổi bật</p>
+    <h2 class="section-title">Tại sao chọn ExtName?</h2>
+    <p class="section-desc">Mô tả tổng quan ngắn gọn về những điểm mạnh của extension. 1–2 câu là đủ.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon purple">⚡</div>
+        <div class="feature-title">Tính năng 1</div>
+        <p class="feature-desc">Mô tả tính năng này làm gì và mang lại lợi ích gì cho người dùng.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon pink">🎯</div>
+        <div class="feature-title">Tính năng 2</div>
+        <p class="feature-desc">Mô tả tính năng này làm gì và mang lại lợi ích gì cho người dùng.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon teal">🔒</div>
+        <div class="feature-title">Tính năng 3</div>
+        <p class="feature-desc">Mô tả tính năng này làm gì và mang lại lợi ích gì cho người dùng.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon amber">✨</div>
+        <div class="feature-title">Tính năng 4</div>
+        <p class="feature-desc">Mô tả tính năng này làm gì và mang lại lợi ích gì cho người dùng.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon purple">📊</div>
+        <div class="feature-title">Tính năng 5</div>
+        <p class="feature-desc">Mô tả tính năng này làm gì và mang lại lợi ích gì cho người dùng.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon teal">🚀</div>
+        <div class="feature-title">Tính năng 6</div>
+        <p class="feature-desc">Mô tả tính năng này làm gì và mang lại lợi ích gì cho người dùng.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="container">
+    <p class="section-label">Bảng giá</p>
+    <h2 class="section-title">Đơn giản, minh bạch</h2>
+    <p class="section-desc">Không phí ẩn. Chọn gói phù hợp với nhu cầu của bạn.</p>
+    <div class="pricing-grid">
+      <!-- FREE -->
+      <div class="pricing-card">
+        <p class="plan-name">Miễn phí</p>
+        <div class="plan-price">$0<span>/tháng</span></div>
+        <p class="plan-desc">Dùng thử không giới hạn thời gian</p>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Tính năng cơ bản A</li>
+          <li><span class="check">✓</span> Tính năng cơ bản B</li>
+          <li><span class="check">✓</span> Tính năng cơ bản C</li>
+          <li style="opacity:0.4"><span style="width:16px;height:16px;display:inline-block;flex-shrink:0;margin-top:3px;">✗</span> Tính năng nâng cao</li>
+          <li style="opacity:0.4"><span style="width:16px;height:16px;display:inline-block;flex-shrink:0;margin-top:3px;">✗</span> Ưu tiên hỗ trợ</li>
+        </ul>
+        <a href="#" class="plan-btn plan-btn-outline">Bắt đầu miễn phí</a>
+      </div>
+      <!-- PRO -->
+      <div class="pricing-card popular">
+        <div class="popular-badge">Phổ biến nhất</div>
+        <p class="plan-name">Pro</p>
+        <div class="plan-price"><sup>$</sup>X<span>/tháng</span></div>
+        <p class="plan-desc">Cho cá nhân và freelancer</p>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Tất cả tính năng Free</li>
+          <li><span class="check">✓</span> Tính năng nâng cao A</li>
+          <li><span class="check">✓</span> Tính năng nâng cao B</li>
+          <li><span class="check">✓</span> Tính năng nâng cao C</li>
+          <li><span class="check">✓</span> Ưu tiên hỗ trợ</li>
+        </ul>
+        <a href="#" class="plan-btn plan-btn-filled">Nâng cấp ngay</a>
+      </div>
+      <!-- LIFETIME -->
+      <div class="pricing-card">
+        <p class="plan-name">Lifetime</p>
+        <div class="plan-price"><sup>$</sup>XX<span> một lần</span></div>
+        <p class="plan-desc">Trả một lần, dùng mãi mãi</p>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Tất cả tính năng Pro</li>
+          <li><span class="check">✓</span> Cập nhật vĩnh viễn</li>
+          <li><span class="check">✓</span> Hỗ trợ ưu tiên cao nhất</li>
+          <li><span class="check">✓</span> Truy cập tính năng Beta</li>
+          <li><span class="check">✓</span> Invoice cho hoàn thuế</li>
+        </ul>
+        <a href="#" class="plan-btn plan-btn-outline">Mua trọn đời</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- LEGAL SECTION -->
+<section id="legal" style="padding: 6rem 0;">
+  <div class="container">
+    <p class="section-label">Pháp lý</p>
+    <h2 class="section-title">Điều khoản & Chính sách</h2>
+    <p class="section-desc">Các tài liệu pháp lý điều chỉnh việc sử dụng ExtName.</p>
+
+    <div class="legal-nav">
+      <button class="legal-tab active" onclick="showTab('terms')">Điều khoản dịch vụ</button>
+      <button class="legal-tab" onclick="showTab('privacy')">Chính sách bảo mật</button>
+      <button class="legal-tab" onclick="showTab('refund')">Chính sách hoàn tiền</button>
+      <button class="legal-tab" onclick="showTab('policies')">Chính sách sử dụng</button>
+    </div>
+
+    <!-- TERMS OF SERVICE -->
+    <div id="tab-terms" class="legal-content active">
+      <div class="legal-box">
+        <h3>Điều khoản dịch vụ</h3>
+        <p class="legal-updated">Cập nhật lần cuối: [Ngày tháng năm]</p>
+
+        <h4>1. Chấp nhận điều khoản</h4>
+        <p>Bằng cách cài đặt hoặc sử dụng ExtName, bạn đồng ý bị ràng buộc bởi các Điều khoản dịch vụ này. Nếu bạn không đồng ý với bất kỳ phần nào, vui lòng ngừng sử dụng extension.</p>
+
+        <h4>2. Mô tả dịch vụ</h4>
+        <p>ExtName là một Chrome Extension cung cấp [mô tả chức năng chính]. Chúng tôi có quyền thay đổi, tạm dừng hoặc ngừng dịch vụ bất cứ lúc nào mà không cần thông báo trước.</p>
+
+        <h4>3. Tài khoản người dùng</h4>
+        <p>Bạn chịu trách nhiệm duy trì tính bảo mật của tài khoản và mật khẩu của mình. Bạn đồng ý thông báo ngay cho chúng tôi về bất kỳ hành vi sử dụng trái phép nào.</p>
+
+        <h4>4. Sở hữu trí tuệ</h4>
+        <p>ExtName và tất cả nội dung liên quan là tài sản độc quyền của [Tên của bạn]. Bạn không được sao chép, phân phối hoặc tạo ra các sản phẩm phái sinh mà không có sự cho phép bằng văn bản.</p>
+
+        <h4>5. Giới hạn trách nhiệm</h4>
+        <p>Trong phạm vi tối đa được pháp luật cho phép, chúng tôi không chịu trách nhiệm về bất kỳ thiệt hại gián tiếp, ngẫu nhiên nào phát sinh từ việc sử dụng extension.</p>
+
+        <h4>6. Liên hệ</h4>
+        <p>Mọi thắc mắc về Điều khoản dịch vụ, vui lòng liên hệ: <strong style="color: var(--text);">your@email.com</strong></p>
+      </div>
+    </div>
+
+    <!-- PRIVACY POLICY -->
+    <div id="tab-privacy" class="legal-content">
+      <div class="legal-box">
+        <h3>Chính sách bảo mật</h3>
+        <p class="legal-updated">Cập nhật lần cuối: [Ngày tháng năm]</p>
+
+        <h4>1. Thông tin chúng tôi thu thập</h4>
+        <p>ExtName thu thập các thông tin sau khi bạn sử dụng extension:</p>
+        <ul>
+          <li>Thông tin tài khoản (email, tên) khi bạn đăng ký</li>
+          <li>Dữ liệu sử dụng ẩn danh để cải thiện dịch vụ</li>
+          <li>[Liệt kê các dữ liệu cụ thể extension của bạn thu thập]</li>
+        </ul>
+
+        <h4>2. Cách chúng tôi sử dụng thông tin</h4>
+        <p>Thông tin thu thập được sử dụng để: cung cấp và cải thiện dịch vụ, hỗ trợ khách hàng, gửi thông báo quan trọng về tài khoản của bạn.</p>
+
+        <h4>3. Chia sẻ dữ liệu</h4>
+        <p>Chúng tôi <strong style="color: var(--text);">không bán</strong> dữ liệu cá nhân của bạn cho bên thứ ba. Chúng tôi chỉ chia sẻ dữ liệu khi cần thiết để cung cấp dịch vụ (ví dụ: xử lý thanh toán qua Stripe/LemonSqueezy).</p>
+
+        <h4>4. Lưu trữ dữ liệu</h4>
+        <p>Dữ liệu của bạn được lưu trữ an toàn trên [tên dịch vụ cloud]. Chúng tôi áp dụng các biện pháp bảo mật tiêu chuẩn ngành để bảo vệ thông tin của bạn.</p>
+
+        <h4>5. Quyền của bạn</h4>
+        <p>Bạn có quyền truy cập, sửa đổi hoặc xóa dữ liệu cá nhân của mình bất cứ lúc nào bằng cách liên hệ: <strong style="color: var(--text);">your@email.com</strong></p>
+
+        <h4>6. Cookie</h4>
+        <p>Extension có thể sử dụng local storage để lưu cài đặt của bạn trên thiết bị. Không có cookie theo dõi bên thứ ba được sử dụng.</p>
+      </div>
+    </div>
+
+    <!-- REFUND POLICY -->
+    <div id="tab-refund" class="legal-content">
+      <div class="legal-box">
+        <h3>Chính sách hoàn tiền</h3>
+        <p class="legal-updated">Cập nhật lần cuối: [Ngày tháng năm]</p>
+
+        <h4>Cam kết hoàn tiền 30 ngày</h4>
+        <p>Chúng tôi cung cấp bảo đảm hoàn tiền trong vòng <strong style="color: var(--text);">30 ngày</strong> kể từ ngày mua nếu bạn không hài lòng với sản phẩm, không cần giải thích lý do.</p>
+
+        <h4>Điều kiện hoàn tiền</h4>
+        <ul>
+          <li>Yêu cầu phải được gửi trong vòng 30 ngày kể từ ngày thanh toán</li>
+          <li>Áp dụng cho gói Pro và Lifetime</li>
+          <li>Gói miễn phí không áp dụng hoàn tiền (vì không mất phí)</li>
+          <li>Mỗi tài khoản chỉ được hoàn tiền một lần</li>
+        </ul>
+
+        <h4>Quy trình yêu cầu hoàn tiền</h4>
+        <p>Để yêu cầu hoàn tiền, vui lòng gửi email đến <strong style="color: var(--text);">your@email.com</strong> với tiêu đề "[Hoàn tiền] - [Email đăng ký]". Chúng tôi sẽ xử lý trong vòng 3–5 ngày làm việc.</p>
+
+        <h4>Phương thức hoàn tiền</h4>
+        <p>Hoàn tiền sẽ được thực hiện qua phương thức thanh toán gốc của bạn. Thời gian nhận tiền phụ thuộc vào ngân hàng/nhà cung cấp thẻ của bạn (thường 5–10 ngày làm việc).</p>
+
+        <h4>Ngoại lệ</h4>
+        <p>Chúng tôi có quyền từ chối hoàn tiền trong trường hợp phát hiện hành vi gian lận hoặc lạm dụng chính sách hoàn tiền.</p>
+      </div>
+    </div>
+
+    <!-- POLICIES -->
+    <div id="tab-policies" class="legal-content">
+      <div class="legal-box">
+        <h3>Chính sách sử dụng</h3>
+        <p class="legal-updated">Cập nhật lần cuối: [Ngày tháng năm]</p>
+
+        <h4>Sử dụng được phép</h4>
+        <p>Bạn có thể sử dụng ExtName cho:</p>
+        <ul>
+          <li>Mục đích cá nhân hoặc thương mại (tùy theo gói đăng ký)</li>
+          <li>Tích hợp vào quy trình làm việc của riêng bạn</li>
+          <li>[Liệt kê các use case phù hợp]</li>
+        </ul>
+
+        <h4>Sử dụng bị cấm</h4>
+        <p>Bạn đồng ý không:</p>
+        <ul>
+          <li>Reverse engineer, decompile hoặc cố gắng trích xuất mã nguồn</li>
+          <li>Phân phối lại, bán hoặc cho thuê extension</li>
+          <li>Sử dụng cho bất kỳ mục đích bất hợp pháp nào</li>
+          <li>Cố gắng phá vỡ các biện pháp bảo mật</li>
+          <li>Tạo tài khoản giả hoặc lạm dụng gói miễn phí</li>
+        </ul>
+
+        <h4>Vi phạm</h4>
+        <p>Chúng tôi có quyền chấm dứt tài khoản của bạn ngay lập tức và không hoàn tiền trong trường hợp vi phạm các chính sách này.</p>
+
+        <h4>Thay đổi chính sách</h4>
+        <p>Chúng tôi có thể cập nhật Chính sách sử dụng bất cứ lúc nào. Các thay đổi quan trọng sẽ được thông báo qua email hoặc thông báo trong extension. Việc tiếp tục sử dụng sau khi thay đổi có hiệu lực đồng nghĩa với việc bạn chấp nhận chính sách mới.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ExtName</div>
+  <ul class="footer-links">
+    <li><a href="#features">Tính năng</a></li>
+    <li><a href="#pricing">Bảng giá</a></li>
+    <li><a onclick="showTab('terms'); document.getElementById('legal').scrollIntoView({behavior:'smooth'})">Điều khoản</a></li>
+    <li><a onclick="showTab('privacy'); document.getElementById('legal').scrollIntoView({behavior:'smooth'})">Bảo mật</a></li>
+    <li><a onclick="showTab('refund'); document.getElementById('legal').scrollIntoView({behavior:'smooth'})">Hoàn tiền</a></li>
+    <li><a href="mailto:your@email.com">Liên hệ</a></li>
+  </ul>
+  <p class="footer-copy">© 2025 ExtName · Được tạo bởi [Tên của bạn]</p>
+</footer>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.legal-tab').forEach((t, i) => {
+    const names = ['terms','privacy','refund','policies'];
+    t.classList.toggle('active', names[i] === name);
+  });
+  document.querySelectorAll('.legal-content').forEach(c => c.classList.remove('active'));
+  const el = document.getElementById('tab-' + name);
+  if (el) el.classList.add('active');
+}
+</script>
+
+</body>
+</html>

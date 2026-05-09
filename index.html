@@ -126,32 +126,20 @@
   .pricing-cta.pro-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(91,110,245,0.4); }
   .pricing-note { font-size: 11.5px; color: var(--ink3); text-align: center; margin-top: 10px; }
 
-  /* REGISTER / SUBMIT FORM */
-  .register-section { background: var(--white); border-top: 1px solid var(--border); padding: 100px 40px; }
-  .register-inner { max-width: 720px; margin: 0 auto; }
-  .register-inner .section-title { font-size: 34px; }
-  .register-inner .section-sub { margin-bottom: 48px; }
-  .form-block { margin-bottom: 36px; }
-  .form-block-title { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 4px; letter-spacing: -0.3px; }
-  .form-block-desc { font-size: 13px; color: var(--ink2); margin-bottom: 18px; line-height: 1.55; }
-  .form-group { margin-bottom: 18px; }
-  .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
-  .form-label .req { color: var(--red); margin-left: 2px; }
-  .form-hint { font-size: 12px; color: var(--ink3); margin-bottom: 7px; }
-  .url-input-wrap { display: flex; border: 1.5px solid var(--border); border-radius: 9px; overflow: hidden; transition: border-color .18s; background: var(--white); }
-  .url-input-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,110,245,0.12); }
-  .url-input-wrap.error { border-color: var(--red); }
-  .url-input-wrap.error:focus-within { box-shadow: 0 0 0 3px rgba(239,68,68,0.12); }
-  .url-prefix { padding: 0 12px; background: var(--surface); border-right: 1.5px solid var(--border); font-size: 13px; font-weight: 600; color: var(--ink2); display: flex; align-items: center; white-space: nowrap; font-family: 'JetBrains Mono', monospace; }
-  .url-prefix.error { border-color: var(--red); color: var(--red); }
-  .url-field { flex: 1; padding: 10px 13px; font-family: 'Sora', sans-serif; font-size: 13px; color: var(--ink); border: none; outline: none; background: transparent; }
-  .url-field::placeholder { color: #b0b0c8; }
-  .field-error { font-size: 12px; font-weight: 600; color: var(--red); margin-top: 6px; display: none; }
-  .field-error.show { display: block; }
-  .form-divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
-  .form-submit { width: 100%; padding: 14px; border: none; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all .22s; box-shadow: 0 4px 16px rgba(91,110,245,0.3); margin-top: 8px; }
-  .form-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(91,110,245,0.4); }
-  .form-submit:active { transform: scale(0.99); }
+  /* POLICY MODAL */
+  .policy-modal-overlay { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(12,12,20,0.6); backdrop-filter: blur(6px); align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto; }
+  .policy-modal-overlay.open { display: flex; }
+  .policy-modal { background: var(--white); border-radius: 20px; max-width: 760px; width: 100%; padding: 52px 56px; position: relative; margin: auto; box-shadow: 0 24px 80px rgba(0,0,0,0.18); }
+  .policy-modal-close { position: absolute; top: 20px; right: 24px; width: 34px; height: 34px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); cursor: pointer; font-size: 18px; color: var(--ink2); display: flex; align-items: center; justify-content: center; transition: all .18s; }
+  .policy-modal-close:hover { background: #ebebeb; color: var(--ink); }
+  .policy-eyebrow { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 10px; }
+  .policy-modal h2 { font-size: 28px; font-weight: 800; letter-spacing: -0.8px; color: var(--ink); margin-bottom: 6px; }
+  .policy-updated { font-size: 12px; color: var(--ink3); margin-bottom: 32px; }
+  .policy-modal h3 { font-size: 15px; font-weight: 700; color: var(--ink); margin: 28px 0 8px; }
+  .policy-modal p { font-size: 14px; color: var(--ink2); line-height: 1.75; margin-bottom: 12px; }
+  .policy-modal ul { padding-left: 20px; margin-bottom: 12px; }
+  .policy-modal ul li { font-size: 14px; color: var(--ink2); line-height: 1.75; margin-bottom: 4px; }
+  @media (max-width: 640px) { .policy-modal { padding: 36px 24px; } }
 
   /* USE CASES */
   .usecases-section { max-width: 1120px; margin: 0 auto; padding: 100px 40px; }
@@ -228,7 +216,6 @@
     <a href="#features">Features</a>
     <a href="#how">How it works</a>
     <a href="#pricing">Pricing</a>
-    <a href="#register">Submit extension</a>
   </div>
   <a href="#install" class="nav-cta">Add to Chrome →</a>
 </nav>
@@ -397,70 +384,6 @@
   </div>
 </section>
 
-<!-- REGISTER / SUBMIT -->
-<section class="register-section" id="register">
-  <div class="register-inner">
-    <div class="section-eyebrow">Developer Portal</div>
-    <h2 class="section-title">Submit your extension</h2>
-    <p class="section-sub">Publishing on PageMine? Fill in the details below so we can review and verify your listing before it goes live.</p>
-
-    <form onsubmit="handleSubmit(event)">
-
-      <!-- Pricing page -->
-      <div class="form-block">
-        <div class="form-block-title">Pricing page</div>
-        <div class="form-block-desc">To help us learn more about what you're selling</div>
-        <div class="form-group">
-          <label class="form-label">Pricing page URL <span class="req">*</span></label>
-          <div class="url-input-wrap" id="wrap-pricing">
-            <span class="url-prefix" id="prefix-pricing">https://</span>
-            <input class="url-field" id="input-pricing" type="text" placeholder="e.g website.com/pricing or pricing.website.com" oninput="clearError('pricing')">
-          </div>
-          <div class="field-error" id="error-pricing">Please enter a valid URL for pricing page.</div>
-        </div>
-      </div>
-
-      <hr class="form-divider">
-
-      <!-- Terms & Policies -->
-      <div class="form-block">
-        <div class="form-block-title">Terms and policies</div>
-        <div class="form-block-desc">Your website must link to the following terms and policies to successfully be verified.</div>
-
-        <div class="form-group">
-          <label class="form-label">Terms of service <span class="req">*</span></label>
-          <div class="form-hint">URL must include a path, e.g. website.com/terms-and-conditions</div>
-          <div class="url-input-wrap" id="wrap-tos">
-            <span class="url-prefix" id="prefix-tos">https://</span>
-            <input class="url-field" id="input-tos" type="text" placeholder="e.g website.com/terms-and-conditions" oninput="clearError('tos')">
-          </div>
-          <div class="field-error" id="error-tos">Please enter a valid URL for terms of service.</div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Privacy policy <span class="req">*</span></label>
-          <div class="url-input-wrap" id="wrap-privacy">
-            <span class="url-prefix" id="prefix-privacy">https://</span>
-            <input class="url-field" id="input-privacy" type="text" placeholder="e.g website.com/privacy, privacy.website.com" oninput="clearError('privacy')">
-          </div>
-          <div class="field-error" id="error-privacy">Please enter a valid URL for privacy policy.</div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Refund policy <span class="req">*</span></label>
-          <div class="url-input-wrap" id="wrap-refund">
-            <span class="url-prefix" id="prefix-refund">https://</span>
-            <input class="url-field" id="input-refund" type="text" placeholder="e.g website.com/refund, refund.website.com" oninput="clearError('refund')">
-          </div>
-          <div class="field-error" id="error-refund">Please enter a valid URL for refund policy.</div>
-        </div>
-      </div>
-
-      <button type="submit" class="form-submit">Submit for review →</button>
-    </form>
-  </div>
-</section>
-
 <!-- CTA -->
 <section class="cta-section" id="install">
   <div class="cta-inner">
@@ -482,8 +405,9 @@
     PageMine
   </div>
   <div class="footer-links">
-    <a href="#">Privacy Policy</a>
-    <a href="#">Terms</a>
+    <a href="#" onclick="openPolicy('privacy');return false;">Privacy Policy</a>
+    <a href="#" onclick="openPolicy('terms');return false;">Terms of Service</a>
+    <a href="#" onclick="openPolicy('refund');return false;">Refund Policy</a>
     <a href="#">GitHub</a>
     <a href="#">Support</a>
     <a href="#">Changelog</a>
@@ -491,33 +415,135 @@
   <span class="footer-copy">© 2026 PageMine. MIT License.</span>
 </footer>
 
+<!-- TERMS OF SERVICE MODAL -->
+<div class="policy-modal-overlay" id="modal-terms">
+  <div class="policy-modal">
+    <button class="policy-modal-close" onclick="closePolicy('terms')">×</button>
+    <div class="policy-eyebrow">Legal</div>
+    <h2>Terms of Service</h2>
+    <p class="policy-updated">Last updated: May 2025</p>
+
+    <p>By installing or using PageMine (the "Extension"), you agree to the following terms. Please read them carefully before proceeding.</p>
+
+    <h3>1. Nature of the Extension</h3>
+    <p>PageMine is a browser-based tool that allows you to manage the visual layout of web pages you visit. It operates exclusively within your local browser environment. All actions taken by the Extension are initiated directly and deliberately by you — nothing happens in the background without your explicit interaction.</p>
+
+    <h3>2. User Responsibility</h3>
+    <p>You are solely responsible for how you choose to use PageMine. The Extension provides tools that respond only to your direct input. Any changes you make to the appearance of a web page — including hiding or revealing page elements — are personal browser-side modifications that do not alter the underlying website or affect any other user.</p>
+
+    <h3>3. Scope of Use</h3>
+    <p>PageMine is intended for personal, non-commercial browsing customization. You agree not to use the Extension for any purpose that violates applicable laws or third-party rights. The Extension does not interfere with, intercept, or modify any network communications between your browser and web servers.</p>
+
+    <h3>4. No Warranties</h3>
+    <p>PageMine is provided "as is." We make no guarantees that the Extension will work on every website or browser version, or that it will remain compatible with future browser updates. Your use of the Extension is at your own discretion and risk.</p>
+
+    <h3>5. Limitation of Liability</h3>
+    <p>To the fullest extent permitted by law, the developers of PageMine shall not be liable for any indirect, incidental, or consequential damages arising from your use of the Extension. PageMine does not access, store, or transmit any of your personal data, browsing history, or account credentials.</p>
+
+    <h3>6. Changes to These Terms</h3>
+    <p>We may update these Terms from time to time. Continued use of the Extension after any changes are posted constitutes your acceptance of the revised terms. We encourage you to review this page periodically.</p>
+
+    <h3>7. Contact</h3>
+    <p>If you have questions about these Terms, please reach out via the Support link in the footer of this website.</p>
+  </div>
+</div>
+
+<!-- PRIVACY POLICY MODAL -->
+<div class="policy-modal-overlay" id="modal-privacy">
+  <div class="policy-modal">
+    <button class="policy-modal-close" onclick="closePolicy('privacy')">×</button>
+    <div class="policy-eyebrow">Legal</div>
+    <h2>Privacy Policy</h2>
+    <p class="policy-updated">Last updated: May 2025</p>
+
+    <p>Your privacy is the foundation PageMine was built on. This policy explains what information the Extension does and does not handle, and how your browser permissions are used.</p>
+
+    <h3>1. No Data Collection</h3>
+    <p>PageMine does not collect, record, transmit, or share any information about you or your browsing activity. There are no analytics libraries, no tracking pixels, no telemetry endpoints, and no external servers involved in the operation of this Extension. We have no visibility into which websites you visit, what elements you choose to manage, or any other aspect of your usage.</p>
+
+    <h3>2. Local Storage Only</h3>
+    <p>The only data that exists in connection with PageMine is the configuration you create yourself — such as your layout preferences for specific websites. This configuration is stored exclusively in your browser's local storage (<code>chrome.storage.local</code>) and never leaves your device. You can view, export, or delete this data at any time from within the Extension.</p>
+
+    <h3>3. Browser Permissions</h3>
+    <p>PageMine requests certain browser permissions solely to perform the functions you initiate. All permissions are exercised only when you actively use the Extension on a given page. Specifically:</p>
+    <ul>
+      <li>Page access is used only to apply the visual preferences you have set for that site.</li>
+      <li>Storage access is used only to read and write your local configuration.</li>
+      <li>No permission is ever used to observe, record, or report your activity.</li>
+    </ul>
+    <p>All browser capabilities granted to PageMine remain under your full control. You may remove the Extension and all associated local data at any time through your browser settings.</p>
+
+    <h3>4. No Third-Party Sharing</h3>
+    <p>Because we do not collect any data, there is nothing to share with third parties. PageMine has no advertising relationships, no data licensing arrangements, and no integrations with external services of any kind.</p>
+
+    <h3>5. Children's Privacy</h3>
+    <p>PageMine is a general-purpose browser utility. It does not knowingly collect information from anyone, including minors, as it collects no information at all.</p>
+
+    <h3>6. Open Source Transparency</h3>
+    <p>The source code for PageMine is publicly available. You are welcome to review every line to verify the claims in this policy. We believe transparency is the strongest privacy guarantee we can offer.</p>
+
+    <h3>7. Contact</h3>
+    <p>If you have any questions about this Privacy Policy, please reach out via the Support link in the footer of this website.</p>
+  </div>
+</div>
+
+<!-- REFUND POLICY MODAL -->
+<div class="policy-modal-overlay" id="modal-refund">
+  <div class="policy-modal">
+    <button class="policy-modal-close" onclick="closePolicy('refund')">×</button>
+    <div class="policy-eyebrow">Legal</div>
+    <h2>Refund Policy</h2>
+    <p class="policy-updated">Last updated: May 2025</p>
+
+    <p>We want you to feel confident when choosing PageMine Pro. This policy outlines your options if the Pro plan does not meet your expectations.</p>
+
+    <h3>1. Free Plan</h3>
+    <p>The Free plan is available at no cost and carries no payment obligation. No refund request is necessary for the Free tier.</p>
+
+    <h3>2. Pro Plan — 7-Day Satisfaction Period</h3>
+    <p>If you upgrade to PageMine Pro and are not satisfied for any reason, you may request a full refund within 7 days of your initial payment. No explanation is required. We will process your refund promptly and your account will revert to the Free plan.</p>
+
+    <h3>3. Renewals</h3>
+    <p>Pro subscriptions renew monthly. If you wish to cancel before your next renewal, you may do so at any time from your account settings. Cancellation takes effect at the end of the current billing period — you will not be charged again, and you retain Pro access until the period ends. Refunds are not issued for unused portions of an already-renewed billing period, except where required by applicable law.</p>
+
+    <h3>4. How to Request a Refund</h3>
+    <p>To request a refund within the 7-day window, contact us through the Support link in the footer of this website and include the email address associated with your purchase. We will respond within 2 business days.</p>
+
+    <h3>5. Exceptions</h3>
+    <p>Refunds outside the 7-day window may be considered on a case-by-case basis at our discretion, particularly in circumstances involving billing errors or technical issues that prevented use of the Extension.</p>
+
+    <h3>6. Contact</h3>
+    <p>For any billing or refund questions, please reach out via the Support link in the footer. We're committed to resolving any issues fairly and quickly.</p>
+  </div>
+</div>
+
 <script>
-function clearError(field) {
-  document.getElementById('wrap-' + field).classList.remove('error');
-  document.getElementById('prefix-' + field).classList.remove('error');
-  document.getElementById('error-' + field).classList.remove('show');
+function openPolicy(type) {
+  document.getElementById('modal-' + type).classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
-function validateUrl(val) {
-  return val.trim().length > 3 && val.includes('.');
+function closePolicy(type) {
+  document.getElementById('modal-' + type).classList.remove('open');
+  document.body.style.overflow = '';
 }
-function handleSubmit(e) {
-  e.preventDefault();
-  const fields = ['pricing','tos','privacy','refund'];
-  let valid = true;
-  fields.forEach(f => {
-    const val = document.getElementById('input-' + f).value;
-    if (!validateUrl(val)) {
-      document.getElementById('wrap-' + f).classList.add('error');
-      document.getElementById('prefix-' + f).classList.add('error');
-      document.getElementById('error-' + f).classList.add('show');
-      valid = false;
+// Close on overlay click
+document.querySelectorAll('.policy-modal-overlay').forEach(function(overlay) {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
     }
   });
-  if (valid) {
-    alert('Submitted successfully! We will review your extension within 2–3 business days.');
-    e.target.reset();
+});
+// Close on Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.policy-modal-overlay.open').forEach(function(m) {
+      m.classList.remove('open');
+    });
+    document.body.style.overflow = '';
   }
-}
+});
 </script>
 
 </body>
